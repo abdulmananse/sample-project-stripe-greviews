@@ -36,6 +36,7 @@ return [
     ],
 
     'google' => [
+        'places_url' => env('GOOGLE_PLACES_URL'),
         'places_api_key' => env('GOOGLE_PLACES_API_KEY'),
     ],
 

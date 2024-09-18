@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Http;
 
 class GooglePlacesService
 {
+    protected $url;
     protected $apiKey;
 
     public function __construct()
     {
+        $this->url = config('services.google.places_url');
         $this->apiKey = config('services.google.places_api_key');
     }
 
@@ -21,20 +23,21 @@ class GooglePlacesService
      */
     public function getPlaceReviews(string $placeId)
     {
-        $url = 'https://maps.googleapis.com/maps/api/place/details/json';
+        $url = $this->url . 'details/json';
 
         $response = Http::get($url, [
             'place_id' => $placeId,
             'key'      => $this->apiKey,
-            'fields'   => 'reviews',
+            'fields'   => 'rating,user_ratings_total,reviews',
         ]);
 
         if ($response->successful()) {
             $data = $response->json();
 
-            return $data['result']['reviews'] ?? [];
+            return $data['result'] ?? [];
         }
 
         return [];
     }
+    
 }
